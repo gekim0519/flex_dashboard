@@ -28,8 +28,7 @@ ny_noaa = read_csv("./data/nynoaadat.zip",
 Column {data-width=650}
 -----------------------------------------------------------------------
 
-### Chart A
-
+### Bar chart showing the distribution of snow for year
 ```{r}
  ny_noaa %>% 
    arrange(min_rank(desc(snow))) %>% 
@@ -43,7 +42,7 @@ Column {data-width=650}
 Column {data-width=350}
 -----------------------------------------------------------------------
 
-### Chart B
+### Box plot showing the distribution of maximum temperature for each decade
 
 ```{r}
 ny_noaa %>% 
@@ -52,7 +51,7 @@ ny_noaa %>%
     plot_ly(x = ~years, y = ~tmax, type = "box")
 ```
 
-### Chart C
+### Line graph showing the mean snowfall for the top 5 stations that had the most snowfall for each year
 
 ```{r}
 ny_noaa_plot =  
