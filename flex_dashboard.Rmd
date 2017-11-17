@@ -1,0 +1,69 @@
+---
+title: "NOAA Flexdashboard"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    vertical_layout: fill
+---
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+library(tidyverse)
+library(janitor)
+library(stringr)
+library(forcats)
+library(viridis)
+library(plotly)
+```
+
+#Problem 1
+
+```{r}
+ny_noaa = read_csv("./data/nynoaadat.zip", 
+                   col_types = "cDiiidd") %>%
+  separate(date, into = c("year", "month", "day")) %>%
+  mutate(year = as.numeric(year))
+```
+
+Column {data-width=650}
+-----------------------------------------------------------------------
+
+### Chart A
+
+```{r}
+ ny_noaa %>% 
+   arrange(min_rank(desc(snow))) %>% 
+     plot_ly(y = ~snow, x= ~year, color = ~year,   type = "bar",
+           colors = "Set2")
+```
+
+
+
+
+Column {data-width=350}
+-----------------------------------------------------------------------
+
+### Chart B
+
+```{r}
+ny_noaa %>% 
+    mutate(years = (year %/% 10)*10,
+           tmax = tmax/10) %>%
+    plot_ly(x = ~years, y = ~tmax, type = "box")
+```
+
+### Chart C
+
+```{r}
+ny_noaa_plot =  
+  ny_noaa %>%
+  group_by(id) %>%
+  summarize(snow_max = max(snow, na.rm = TRUE)) %>%
+  arrange(min_rank(desc(snow_max))) %>%
+  top_n(5) %>%
+  inner_join(ny_noaa) %>%
+  group_by(id, year) %>%
+  summarise(mean_snow = mean(snow, na.rm = TRUE)) 
+
+```
+
