@@ -64,5 +64,8 @@ ny_noaa_plot =
   group_by(id, year) %>%
   summarise(mean_snow = mean(snow, na.rm = TRUE)) 
 
+ny_noaa_plot %>%
+  plot_ly(x = ~year, y = ~mean_snow, color = ~id, type = "scatter", colors = "Set2") %>%
+  add_lines()
 ```
 
